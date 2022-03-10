@@ -10,7 +10,7 @@ The first is an [instant noodle review database](https://www.theramenrater.com) 
 
 The second data source is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country<sup>※</sup>. This ranking can be accessed [here](https://instantnoodles.org/en/noodles/demand/table/).
 
-The final one is the United Nations Total Population Database, which provides the population estimates included in this dataset. You can find this database and more [here](https://www.un.org/en/development/desa/population/publications/database/index.asp). I use this to calculate ramen consumption per capita.
+The final one is the United Nations Total Population Database, which provides the population estimates included in my dataset. You can find this database and more [here](https://www.un.org/en/development/desa/population/publications/database/index.asp). I use this to calculate ramen consumption per capita.
 <br />
 <br />
 Data from these three sources were compiled along with "The Big List" raw data in the provided Excel file, "Ramen Full List (last updated date)".
