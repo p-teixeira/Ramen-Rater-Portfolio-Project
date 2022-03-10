@@ -1,11 +1,101 @@
--- I used MySQL to run these queries. Sheets from the pre-cleaned Excel file "Ramen Full List 2022.03.09" were
--- imported through MySQL Workbench as the following:
+-- I used MySQL to run these queries. CSV files from the pre-cleaned Excel file "Ramen Full List 2022.03.09"
+--  were imported through MySQL Workbench as the following:
     -- ramenreviewed: "Reviewed" sheet
-    -- ramenranking: "Ranking" sheet
     -- ramencountry: "Country Info" sheet
+    -- ramenranking: "Ranking" sheet
     -- ramenconsumption: "Instant Noodle Consumption" sheet
     -- ramenurl: "URL" sheet
+    
+-- Alternatively, you can run the following code below to create the tables,
+-- and import CSV files yourself (change csv_filename to the appropriate name):
+
+-- CREATE TABLE `ramenreviewed` (
+--   `Review_ID` smallint NOT NULL AUTO_INCREMENT,
+--   `Review_Date` date DEFAULT NULL,
+--   `Brand` varchar(50) DEFAULT NULL,
+--   `Variety` varchar(100) DEFAULT NULL,
+--   `Style` varchar(20) DEFAULT NULL,
+--   `Country_ID` tinyint DEFAULT NULL,
+--   `Stars` float DEFAULT NULL,
+--   PRIMARY KEY (`Review_ID`)
+-- );
+
+-- LOAD DATA INFILE 'csv_filename' 
+-- INTO TABLE ramenreviewed 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
  
+-- CREATE TABLE `ramencountry` (
+--   `Country_ID` int NOT NULL,
+--   `Country` text,
+--   `Subregion` text,
+--   `Region` text,
+--   `2016_Population` bigint DEFAULT NULL,
+--   `2017_Population` bigint DEFAULT NULL,
+--   `2018_Population` bigint DEFAULT NULL,
+--   `2019_Population` bigint DEFAULT NULL,
+--   `2020_Population` bigint DEFAULT NULL,
+--   `Avg_Population` bigint DEFAULT NULL,
+--   PRIMARY KEY (`Country_ID`)
+-- );
+
+-- LOAD DATA INFILE 'csv_filename' 
+-- INTO TABLE ramencountry 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
+
+-- CREATE TABLE `ramenranking` (
+--   `Review_ID` int DEFAULT NULL,
+--   `Rank_Year` int DEFAULT NULL,
+--   `Rank_Category` text,
+--   `Rank` int DEFAULT NULL
+-- );
+
+-- LOAD DATA INFILE 'csv_filename' 
+-- INTO TABLE ramenranking 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
+
+-- CREATE TABLE `ramenconsumption` (
+--   `Country` varchar(20) NOT NULL,
+--   `2016_Consumption` bigint DEFAULT NULL,
+--   `2017_Consumption` bigint DEFAULT NULL,
+--   `2018_Consumption` bigint DEFAULT NULL,
+--   `2019_Consumption` bigint DEFAULT NULL,
+--   `2020_Consumption` bigint DEFAULT NULL,
+--   `Avg_Consumption` bigint DEFAULT NULL,
+--   PRIMARY KEY (`Country`)
+-- );
+
+-- LOAD DATA INFILE 'csv_filename' 
+-- INTO TABLE ramenconsumption 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
+
+-- CREATE TABLE `ramenurl` (
+--   `Review_ID` smallint NOT NULL AUTO_INCREMENT,
+--   `URL` varchar(250) DEFAULT NULL,
+--   PRIMARY KEY (`Review_ID`)
+-- );
+
+-- LOAD DATA INFILE 'csv_filename' 
+-- INTO TABLE ramenurl 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
+
+
+
+-- With that out of the way, let's get to analyzing!
 -- First thing's first, let's calculate instant noodle consumption per capita per region using the noodle
 -- consumption and population data from the ramenconsumption and ramencountry tables. Let's include the 
 -- region population as well for some added context.
