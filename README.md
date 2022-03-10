@@ -6,11 +6,11 @@ Note: the main purpose of this portfolio project is to showcase data analysis sk
 <br />
 Here I analyze data on instant noodles from around the world, using a custom dataset assembled from three different sources.
 
-The first is an [instant noodle review database](https://www.theramenrater.com) with over 4,000 reviews run by Mr. Hans "The Ramen Rater" Lienesch. Hans generously provides a basic set of this data for free (referred to as "The Big List" on his site) in xlsx and PDF formats, which I <em>**extensively cleaned, standardized, and updated**</em> to include the latest reviews, all their corresponding URL, and complete record of his Top Ten Lists over the years.
+The first is an [instant noodle review database](https://www.theramenrater.com) with over 4,000 reviews run by Mr. Hans "The Ramen Rater" Lienesch. Hans generously provides a basic set of this data for free (referred to as "The Big List" on his site) in XLSX and PDF formats, which I <em>**extensively cleaned, standardized, and updated**</em> to include the latest reviews, all their corresponding URL, and complete record of his Top Ten Lists over the years.
 
-The second data source is the United Nations Total Population Database, which provides the population estimates included in this dataset. You can find this database and more [here](https://www.un.org/en/development/desa/population/publications/database/index.asp).
+The second data source is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country<sup>※</sup>. This ranking can be accessed [here](https://instantnoodles.org/en/noodles/demand/table/).
 
-The final one is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country<sup>※</sup>. This ranking can be accessed [here](https://instantnoodles.org/en/noodles/demand/table/).
+The final one is the United Nations Total Population Database, which provides the population estimates included in this dataset. You can find this database and more [here](https://www.un.org/en/development/desa/population/publications/database/index.asp). I use this to calculate ramen consumption per capita.
 <br />
 <br />
 Data from these three sources were compiled along with "The Big List" raw data in the provided Excel file, "Ramen Full List (last updated date)".
