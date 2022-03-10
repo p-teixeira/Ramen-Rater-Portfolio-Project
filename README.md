@@ -1,6 +1,6 @@
 # Ramen Rater Portfolio Project
 
-The main purpose of this project is to showcase data analysis skills and strategies, using SQL, Python, and R. As interesting as the findings may be, they should not be taken at face value as the validity of the data sources have not been properly verified.
+The main purpose of this project is to showcase data analysis skills and strategies, using SQL, Python, R, and Tableau. As interesting as the findings may be, they should not be taken at face value as the validity of the data sources have not been properly verified.
 
 
 The data analyzed pertains to instant noodles around the world, using a custom dataset with data gathered from three different sources:
