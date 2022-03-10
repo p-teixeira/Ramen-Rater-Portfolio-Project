@@ -7,9 +7,9 @@ The data analyzed pertains to instant noodles around the world, using a custom d
 
 The first is an instant noodle review database with over 4,000 reviews run by Mr. Hans "The Ramen Rater" Lienesch at https://www.theramenrater.com. Hans generously provides a basic set of this data for free (referred to as "The Big List" on his site) in xlsx and PDF formats, which I extensively cleaned, standardized, and updated to include the latest reviews, all their corresponding URL, and complete record of his Top Ten Lists over the years.
 
-The second data source is the United Nations Total Population Database, which provides the population estimates included in this dataset. You can find this database and more at https://www.un.org/en/development/desa/population/publications/database/index.asp.
+The second data source is the United Nations Total Population Database, which provides the population estimates included in this dataset. You can find this database and more [here](https://www.un.org/en/development/desa/population/publications/database/index.asp).
 
-The final one is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country.※ The ranking can be accessed here: https://instantnoodles.org/en/noodles/demand/table/.
+The final one is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country.※ The ranking can be accessed [here](https://instantnoodles.org/en/noodles/demand/table/).
 
 This data is gathered in the provided Excel file, "Ramen Full List (last updated date)".
 
