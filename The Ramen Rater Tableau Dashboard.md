@@ -1,2 +1,0 @@
-[Here] (https://public.tableau.com/views/AnalyzingTheRamenRatersData/AnalyzingTheRamenRater?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link) is my Tableau viz using some of this ramen rater data
-
