@@ -1,6 +1,6 @@
 # "The Ramen Rater" Portfolio Project
 
-Note: the main purpose of this portfolio project is to showcase data analysis skills and strategies, using SQL, Python, R, and Tableau. As interesting as the findings may be, they are for demonstration purposes only as the validity of the data sources have not been properly verified.
+Note: the main purpose of this portfolio project is to showcase data analysis skills and strategies, using SQL, Tableau, Python and R. As interesting as the findings may be, they are for demonstration purposes only as the validity of the data sources have not been properly verified.
 <br />
 <br />
 <br />
