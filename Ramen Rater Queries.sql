@@ -1,4 +1,4 @@
--- I used MySQL to run these queries. CSV files from the pre-cleaned Excel file "Ramen Full List 2022.03.10"
+-- I used MySQL to run these queries. CSV files from the pre-cleaned Excel file "Ramen Full List 2022.03.15"
 --  were imported through MySQL Workbench as the following:
     -- ramenreviewed: "Reviewed" sheet
     -- ramencountry: "Country Info" sheet
