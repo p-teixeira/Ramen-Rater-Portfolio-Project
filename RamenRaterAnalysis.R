@@ -5,19 +5,19 @@ library(plotly)
 library(lubridate)
 
 #Then, loading data
-ramenrev <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.10.xlsx", 
+ramenrev <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.15.xlsx", 
                        sheet = "Reviewed")
 
-ramenran <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.10.xlsx", 
+ramenran <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.15.xlsx", 
                        sheet = "Ranking")
 
-ramenctr <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.10.xlsx", 
+ramenctr <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.15.xlsx", 
                        sheet = "Country Info")
 
-ramencon <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.10.xlsx", 
+ramencon <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.15.xlsx", 
                        sheet = "Instant Noodle Consumption")
 
-ramenurl <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.10.xlsx", 
+ramenurl <- read_excel("Desktop/Portfolio/Ramen/Ramen Full List 2022.03.15.xlsx", 
                        sheet = "URL")
 
 #Check how many of each Style there are in ramenrev
