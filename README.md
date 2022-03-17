@@ -16,6 +16,7 @@ The final one is the United Nations Total Population Database, which provides th
 Data from these three sources were compiled along with "The Big List" raw data in the provided Excel file, "Ramen Full List (last updated date)".
 <br />
 <br />
+<br />In addition to the files in the repository, you can also see my R code in markdown [here](https://p-teixeira.github.io/Ramen-Rater-Portfolio-Project/) and my Tableau visualization [here]((https://public.tableau.com/views/AnalyzingTheRamenRatersData/AnalyzingTheRamenRater?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link).
 <br />
 <sup>※</sup> Please note there are a few differences between the data provided by WINA and the data in the set used for this project. For one, China and Hong Kong's values have been split for this project, and are approximated based on the proportion between their relative populations. The "Others" value in WINA's data has also been further split to approximate the noodle consumption of nations not originally included in their ranking. Similar to how China and Hong Kong were split, this approximation was calculated by multiplying the Others' consumption by the proportion of the population of the nation in question relative to the total remaining world population (i.e., the population of the "Others").
 
