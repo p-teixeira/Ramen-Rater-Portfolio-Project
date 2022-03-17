@@ -1,8 +1,6 @@
 ---
 title: "Ramen Rater Analysis"
-output: 
-  html_document:
-    keep_md: true
+output: html_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
