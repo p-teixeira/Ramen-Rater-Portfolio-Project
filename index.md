@@ -16,23 +16,23 @@ library(lubridate) #for easier date manipulation
 library(DT) #to use datatable() instead of View() for viewing data in markdown
 
 ramenrev <- read_excel(
-  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.15.xlsx",
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.18.xlsx",
   sheet = "Reviewed")
 
 ramenran <- read_excel(
-  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.15.xlsx",
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.18.xlsx",
   sheet = "Ranking")
 
 ramenctr <- read_excel(
-  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.15.xlsx",
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.18.xlsx",
   sheet = "Country Info")
 
 ramencon <- read_excel(
-  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.15.xlsx",
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.18.xlsx",
   sheet = "Instant Noodle Consumption")
 
 ramenurl <- read_excel(
-  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.15.xlsx",
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.03.18.xlsx",
   sheet = "URL")
 ```
 
