@@ -1,101 +1,12 @@
--- I used MySQL to run these queries. CSV files from the pre-cleaned Excel file "Ramen Full List 2022.03.15"
---  were imported through MySQL Workbench as the following:
-    -- ramenreviewed: "Reviewed" sheet
-    -- ramencountry: "Country Info" sheet
+-- I used MySQL to run these queries. Sheets from the pre-cleaned Excel file "Ramen Full List 2022.03.18" were
+-- imported through MySQL Workbench as the following:
+	-- ramenreviewed: "Reviewed" sheet
     -- ramenranking: "Ranking" sheet
+    -- ramencountry: "Country Info" sheet
     -- ramenconsumption: "Instant Noodle Consumption" sheet
     -- ramenurl: "URL" sheet
-    
--- Alternatively, you can run the following code below to create the tables,
--- and import CSV files yourself (change csv_filename to the appropriate name):
-
--- CREATE TABLE `ramenreviewed` (
---   `Review_ID` smallint NOT NULL AUTO_INCREMENT,
---   `Review_Date` date DEFAULT NULL,
---   `Brand` varchar(50) DEFAULT NULL,
---   `Variety` varchar(100) DEFAULT NULL,
---   `Style` varchar(20) DEFAULT NULL,
---   `Country_ID` tinyint DEFAULT NULL,
---   `Stars` float DEFAULT NULL,
---   PRIMARY KEY (`Review_ID`)
--- );
-
--- LOAD DATA INFILE 'csv_filename' 
--- INTO TABLE ramenreviewed 
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- LINES TERMINATED BY '\n'
--- IGNORE 1 ROWS;
  
--- CREATE TABLE `ramencountry` (
---   `Country_ID` int NOT NULL,
---   `Country` text,
---   `Subregion` text,
---   `Region` text,
---   `2016_Population` bigint DEFAULT NULL,
---   `2017_Population` bigint DEFAULT NULL,
---   `2018_Population` bigint DEFAULT NULL,
---   `2019_Population` bigint DEFAULT NULL,
---   `2020_Population` bigint DEFAULT NULL,
---   `Avg_Population` bigint DEFAULT NULL,
---   PRIMARY KEY (`Country_ID`)
--- );
-
--- LOAD DATA INFILE 'csv_filename' 
--- INTO TABLE ramencountry 
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- LINES TERMINATED BY '\n'
--- IGNORE 1 ROWS;
-
--- CREATE TABLE `ramenranking` (
---   `Review_ID` int DEFAULT NULL,
---   `Rank_Year` int DEFAULT NULL,
---   `Rank_Category` text,
---   `Rank` int DEFAULT NULL
--- );
-
--- LOAD DATA INFILE 'csv_filename' 
--- INTO TABLE ramenranking 
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- LINES TERMINATED BY '\n'
--- IGNORE 1 ROWS;
-
--- CREATE TABLE `ramenconsumption` (
---   `Country` varchar(20) NOT NULL,
---   `2016_Consumption` bigint DEFAULT NULL,
---   `2017_Consumption` bigint DEFAULT NULL,
---   `2018_Consumption` bigint DEFAULT NULL,
---   `2019_Consumption` bigint DEFAULT NULL,
---   `2020_Consumption` bigint DEFAULT NULL,
---   `Avg_Consumption` bigint DEFAULT NULL,
---   PRIMARY KEY (`Country`)
--- );
-
--- LOAD DATA INFILE 'csv_filename' 
--- INTO TABLE ramenconsumption 
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- LINES TERMINATED BY '\n'
--- IGNORE 1 ROWS;
-
--- CREATE TABLE `ramenurl` (
---   `Review_ID` smallint NOT NULL AUTO_INCREMENT,
---   `URL` varchar(250) DEFAULT NULL,
---   PRIMARY KEY (`Review_ID`)
--- );
-
--- LOAD DATA INFILE 'csv_filename' 
--- INTO TABLE ramenurl 
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- LINES TERMINATED BY '\n'
--- IGNORE 1 ROWS;
-
-
-
--- With that out of the way, let's get to analyzing!
+-- With that out of the way, let's get to analyzing! 
 -- First thing's first, let's calculate instant noodle consumption per capita per region using the noodle
 -- consumption and population data from the ramenconsumption and ramencountry tables. Let's include the 
 -- region population as well for some added context.
@@ -125,7 +36,7 @@ ORDER BY Yearly_Consumption_Per_Capita DESC;
 
 SELECT ROW_NUMBER() OVER(
 	ORDER BY ROUND(Avg_Consumption / Avg_Population, 2) DESC
-) AS Consumption_Ranking, con.Country, FORMAT(Avg_Population,0) AS Population,
+) AS Consumption_Ranking, con.Country, FORMAT(Avg_Population,0) AS Population,RamenReviewed
 ROUND(Avg_Consumption / Avg_Population, 2) AS Yearly_Consumption_Per_Capita
 FROM ramenconsumption con, ramencountry ctr
 WHERE con.Country = ctr.Country;
@@ -263,8 +174,8 @@ Avg_Stars
 FROM StarsPerDate;
 
 -- That's... a lot to take in. Still, I think there may be something of value here. Let's keep this in mind and
--- graph later in R or python. For now, let's move on and look at the relationship between country and average 
--- noodle star rating next. Let's include the review count as well for context.
+-- graph later. For now, let's move on and look at the relationship between country and average noodle star rating
+-- next. Let's include the review count as well for context.
 
 SELECT Region, ROUND(AVG(Stars),2) AS Avg_Rating, COUNT(*) AS Review_Count
 FROM RamenReviewed rr
@@ -288,7 +199,7 @@ HAVING COUNT(*) >= 10;
 
 -- Malaysia seems to produce the best noodles! This isn't all that surprising to me personally, as I've taken
 -- a look at some of Hans' Top 10 Lists and Malaysian noodles are frequently featured. We'll see this in more
--- detail soon when we work with the Top 10 table. Moving on, does there seem to be any obvious correlation
+-- detail later when we work with the Top 10 table. Moving on, does there seem to be any obvious correlation
 -- between ramen consumption per capita per country and noodle quality? Are top noodle consumers also top noodle
 -- producers?
 
@@ -334,7 +245,7 @@ HAVING Review_Count >= 15;
 
 -- Surprisingly, the American branch of Myojo has been doing pretty well for itself, coming in at number 3! Seems
 -- like the Singaporean and Japanese branches were dragging it down in the brand-only rankings, which is definitely
--- unexpected. You'd think it'd be the Asian subsidiaries that would be doing the heavy-lifting. Now I'm curious,
+-- unexpected. You'd think it'd be the Asian subsidiaries that would be doing the heavy-lifting. Now I'm curious;
 -- what does the brand rank look like among American-made noodles only?
 
 SELECT ROW_NUMBER() OVER(
@@ -378,7 +289,7 @@ WHERE Region = "Europe" AND rev.Review_ID IN (
 	WHERE Rank_Category IN ('Top Pack', 'Top Boxed', 'Top Bowl', 'Top Cup', 'Reader\'s Choice')
 );
     
--- Weird that they all featured in the Top Cup rank category. Maybe there's less Asian competition in that sector?
+-- Weird that they all featured in the Top Cup rank category. Maybe there's less competition in that sector?
 -- Anyway, we saw which countries produced the most quality noodles, but what about the most "noteworthy" noodles?
 -- This is it, all Top 10 lists are fair game (except country-specific ones). Will the results look any different?
 
