@@ -1,4 +1,4 @@
--- I used MySQL to run these queries. Sheets from the pre-cleaned Excel file "Ramen Full List 2022.03.18" were
+-- I used MySQL to run these queries. Sheets from the pre-cleaned Excel file "Ramen Full List 2022.03.28" were
 -- imported through MySQL Workbench as the following:
 	-- ramenreviewed: "Reviewed" sheet
     -- ramenranking: "Ranking" sheet
