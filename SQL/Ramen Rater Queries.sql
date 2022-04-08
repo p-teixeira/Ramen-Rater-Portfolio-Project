@@ -437,9 +437,9 @@ FROM TopAll, AllReviews
 WHERE TopAll.Country = AllReviews.Country;
 
 -- Well well, not so remarkable after all, eh Japan and USA? Sure, some countries with very few reviews skew the
--- results a bit, but look at Malaysia: even with a sizeable 230 noodles in the database, almost 1 in 5 made it on
--- a Top 10 list. Impressive! In fact, if we look at only noodles that rank number 1 across all lists (barring
--- region-specific ones)... 
+-- results a bit, but look at Malaysia: even with a sizeable 231 (as of April 8th, 2022) noodles in the database, 
+-- almost 1 in 5 made it on a Top 10 list. Impressive! In fact, if we look at only noodles that rank number 1
+-- across all lists (barring region-specific ones)... 
 
 SELECT ROW_NUMBER() OVER(
     ORDER BY COUNT(DISTINCT ran.Review_ID) DESC
@@ -464,4 +464,4 @@ AND Country = 'New Zealand';
 -- That is none other than Culley's World's Hottest Ramen Noodles, topping the Top Spicy Category for
 -- three years running!
 
--- This has been data analysis with SQL. I hope you found th data as interesting as I did!
+-- This has been data analysis with SQL. I hope you found the data as interesting as I did!
