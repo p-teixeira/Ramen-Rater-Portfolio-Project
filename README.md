@@ -6,7 +6,7 @@ Note: the main purpose of this portfolio project is to showcase data analysis me
 <br />
 Here I analyze data on instant noodles from around the world, using a custom dataset assembled from three different sources.
 
-The first is an [instant noodle review database](https://www.theramenrater.com) with over 4,000 reviews run by Mr. Hans "The Ramen Rater" Lienesch. Hans generously provides a basic set of this data for free (referred to as "The Big List" on his site) in XLSX and PDF formats, which I <em>**extensively cleaned, standardized, and updated**</em> to include the latest reviews, all their corresponding URL, and complete record of his Top Ten Lists over the years.
+The first is an [instant noodle review database](https://www.theramenrater.com) with over 4,000 reviews run by Mr. Hans "The Ramen Rater" Lienesch. Hans generously provides a basic set of this data for free (referred to as "The Big List" on his site) in XLSX and PDF formats, which I <em>**extensively cleaned, standardized, and updated**</em> through Google Sheets to include the latest reviews, all their corresponding URL, and complete record of his Top Ten Lists over the years.
 
 The second data source is the global instant noodles demand ranking from the World Instant Noodles Association (WINA), which provides the data on noodle consumption per country<sup>※</sup>. This ranking can be accessed [here](https://instantnoodles.org/en/noodles/demand/table/).
 
