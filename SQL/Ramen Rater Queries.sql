@@ -1,5 +1,5 @@
 -- I used MySQL to run these queries. Sheets from the pre-cleaned Excel file
---  "Ramen Full List 2022.05.09" were imported through MySQL Workbench as the following:
+--  "Ramen Full List 2022.05.23" were imported through MySQL Workbench as the following:
 
     -- ramenreviewed: "Reviewed" sheet
     -- ramenranking: "Ranking" sheet
