@@ -1,0 +1,258 @@
+---
+title: "Ramen Rater Analysis Using R"
+output:
+  html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br>
+Here I show how R can be used for data manipulation, analysis, and graphing. More specifically, I demonstrate how to load the data, some examples of cleaning and manipulating (filtering, renaming columns, pivoting, merging, etc.), and a bit of analysis (total review count over time, noodle consumption per capita, and appearance count in the Ramen Rater's Top 10 rankings by brand).
+
+First thing's first, loading the necessary packages and data. Each Excel sheet is loaded into their own data frame.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse) #for essential data manipulation packages like dplyr and ggplot2
+library(readxl) #to read the Excel file
+library(plotly) #to improve graphing, enabling to zoom in and out of graphs among other things
+library(lubridate) #for easier date manipulation
+library(DT) #to use datatable() instead of View() for viewing data in markdown
+
+ramenrev <- read_excel(
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.06.03.xlsx",
+  sheet = "Reviewed")
+
+ramenran <- read_excel(
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.06.03.xlsx",
+  sheet = "Ranking")
+
+ramenctr <- read_excel(
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.06.03.xlsx",
+  sheet = "Country Info")
+
+ramencon <- read_excel(
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.06.03.xlsx",
+  sheet = "Instant Noodle Consumption")
+
+ramenurl <- read_excel(
+  "/Users/pedroteixeira/Desktop/Data Analysis/Portfolio/Ramen/Ramen Dataset/Ramen Full List 2022.06.03.xlsx",
+  sheet = "URL")
+```
+<br>
+I remember when I was compiling the data into Excel that some of the ramen styles weren't really ramen noodles. In fact, some weren't even food. Let me show you what I mean by grouping the data by the **Style** column in **ramenrev** and outputting the count.
+
+```{r}
+stylecount <- ramenrev %>% 
+  group_by(Style) %>% 
+  count(Style) %>% 
+  rename(Count = n)
+
+datatable(stylecount)
+```
+<br>
+The styles with single digit review counts (bar, bottle, can, restaurant, and toy) aren't noodles, so it doesn't make sense to include these in this analysis. So we will remove them shortly. But first, out of curiosity, what *were* these items? Let's see.
+
+```{r}
+notramenstyle <- c('Bar', 'Bottle','Can','Restaurant', 'Toy')
+notramen <- ramenrev[ramenrev$Style %in% notramenstyle, ]
+
+datatable(notramen)
+```
+<br>
+Here we see ramen flavored Pringles (the "can" entry), a few restaurant reviews, and... *ramen chocolate?!* I'll query the URL for those reviews later so you can check them out for yourself, but for now we can confirm that they're irrelevant to this analysis.
+
+Before we drop those though, I also want to filter out some countries with low noodle entries to focus our analysis with fewer outliers. First let's see what the review distribution is per **Country_ID**.
+
+```{r}
+ctrcount <- ramenrev %>% 
+  group_by(Country_ID) %>% 
+  count(Country_ID) %>% 
+  rename(Count = n)
+
+datatable(ctrcount)
+```
+<br>
+And here's a quick bar graph so we can visualize it more easily.
+
+```{r}
+ggplotly(
+  ggplot(ramenrev, aes(Country_ID)) + geom_bar()
+)
+```
+<br>
+Let's focus our analysis to countries with at least 50 noodle entries in the database, and remove the non-noodle entries mentioned earlier.
+
+```{r}
+filterrev <- ramenrev %>% 
+  filter(!Style %in% notramenstyle) %>% 
+  group_by(Country_ID) %>% 
+  filter(n()>=50) %>% 
+  ungroup()
+
+datatable(filterrev)
+```
+<br>
+We can compare the count of unique values by column between the filtered and unfiltered data frames.
+
+```{r}
+sapply(ramenrev,n_distinct)
+sapply(filterrev,n_distinct)
+```
+<br>
+Great. Before moving on, let's pull up the URLs for the non-ramen entries like I mentioned earlier. The links are in the **ramenurl** data frame, so we will merge that with the **notramen** data frame binding on the **Review_ID** column.
+
+```{r}
+notramen <- merge(x=notramen, y=ramenurl, by='Review_ID')
+
+datatable(notramen)
+```
+<br>
+<br>
+Okay a quick first exercise, let's look at the review count over time, using the **ramenrev** data frame again. Note that we will only use the year part of the **Review_Date** column. We are also removing entries submitted in 2022 as the year is still ongoing.
+
+```{r}
+ggplotly(
+  ramenrev %>% 
+    mutate(Review_Date = format(Review_Date, "%Y")) %>%
+    group_by(Review_Date) %>%
+    summarise(Review_Count = n()) %>% 
+    arrange(Review_Date) %>% 
+    filter(Review_Date<2022) %>%
+    ggplot(aes(x = Review_Date, y = Review_Count, group = 1))+geom_line()
+)
+```
+<br>
+Next, something a little more involved: calculating the noodle consumption per capita. For this we need the country population data in the **ramenctr** data frame and the noodle consumption by country data in the **ramencon** data frame.
+
+So let's combine the two data frames. We will do a left join (all.x=TRUE) here because the **ramencon** data frame includes data on countries that don't appear in the ramen review database. This is in contrast to **ramenctr**, which only includes countries that have at least one noodle review (with exception of the 'World' population entry which we will drop).
+
+```{r}
+# Merging the data frames on column 'Country'
+ctrcon <- merge(x=ramenctr, y=ramencon, by='Country', all.x=TRUE)
+
+# Removing the 'World' column, which is irrelevant
+ctrcon <- ctrcon[!(ctrcon$Country == 'World'), ]
+```
+<br>
+Let's make sure the data types are as expected before we proceed by checking the data types for the columns.
+
+```{r}
+str(ctrcon)
+```
+<br>
+The 2016 and 2017 noodle consumption columns are character type instead of numeric. This is because we don't have this consumption data for all countries, and the missing NaN values default the column to "character". Let's change it back to numeric. We will get a warning about those NAs, but that is fine.
+
+```{r}
+ctrcon$`2016_Consumption` <- as.numeric(ctrcon$`2016_Consumption`)
+ctrcon$`2017_Consumption` <- as.numeric(ctrcon$`2017_Consumption`)
+```
+<br>
+Good, now let's calculate the consumption per capita for each country by year, all in their own column...
+
+```{r}
+ctrcon <- mutate(ctrcon, `2016_Per_Capita_Consumption` = `2016_Consumption`/`2016_Population`) %>% 
+  mutate(ctrcon, `2017_Per_Capita_Consumption` = `2017_Consumption`/`2017_Population`) %>% 
+  mutate(ctrcon, `2018_Per_Capita_Consumption` = `2018_Consumption`/`2018_Population`) %>% 
+  mutate(ctrcon, `2019_Per_Capita_Consumption` = `2019_Consumption`/`2019_Population`) %>% 
+  mutate(ctrcon, `2020_Per_Capita_Consumption` = `2020_Consumption`/`2020_Population`) %>% 
+  mutate(ctrcon, Avg_Per_Capita_Consumption = Avg_Consumption/Avg_Population)
+```
+<br>
+...and round the per capita values to 2 decimal points.
+
+```{r}
+ctrcon <- ctrcon %>% 
+  mutate(across(`2016_Per_Capita_Consumption`:Avg_Per_Capita_Consumption, round, 2))
+
+datatable(ctrcon)
+```
+<br>
+I want to graph the consumption per capita per region over the years, but we can't do so easily with the data in this state. To do that, we will have to make the data frame tall rather than wide. So let's isolate only the per capita columns into their own data frame so it's easier to work with (**concap**), and then change it from wide to tall.
+
+```{r}
+concap <- select(ctrcon, Country, Subregion, Region, 
+                 `2016_Per_Capita_Consumption`:`2020_Per_Capita_Consumption`)
+concap <- gather(concap, Year, Per_Capita_Consumption, 
+                 `2016_Per_Capita_Consumption`:`2020_Per_Capita_Consumption`)
+datatable(concap)
+```
+<br>
+Looking good, but those rows with missing entries need to go (see lines 53 or 117 for example). Having those in there will interfere with the graphing, so let's get rid of them. Incidentally, we didn't do this earlier in the **ctrcon** data frame because that would mean dropping the entire row of the country with missing data. Now that the data is tall, we can drop only what we don't have.
+
+```{r}
+concap <- na.omit(concap)
+```
+<br>
+Next, since this is only per capita data, we don't need such wordy entries in the Year column. Let's change it so that only the year is listed.
+
+```{r}
+concap$Year[concap$Year == '2016_Per_Capita_Consumption'] <- '2016'
+concap$Year[concap$Year == '2017_Per_Capita_Consumption'] <- '2017'
+concap$Year[concap$Year == '2018_Per_Capita_Consumption'] <- '2018'
+concap$Year[concap$Year == '2019_Per_Capita_Consumption'] <- '2019'
+concap$Year[concap$Year == '2020_Per_Capita_Consumption'] <- '2020'
+```
+<br>
+How does it look?
+
+```{r}
+datatable(concap)
+```
+<br>
+Much better!
+Finally, let's do some graphing. Let's graph the average consumption per capita per year, grouping by region. We will use ggplotly to add labels (hover over each layer to see).
+
+```{r}
+ggplotly(
+  concap %>%  
+    group_by(Region, Year) %>% 
+    summarize(Avg_Per_Capita_Consumption = mean(Per_Capita_Consumption)) %>% 
+    ggplot(aes(x=Year, y=Avg_Per_Capita_Consumption, fill=Region, 
+               text = paste0("Consumption: ", round(Avg_Per_Capita_Consumption, 2)))) + 
+    geom_bar(position = 'stack', stat = 'identity'), tooltip = "text"
+)
+```
+<br>
+<br>
+Moving on, let's take a look at brands and the rankings data. I want to see which brands showed up most frequently on Top 10 lists. For this I will merge some parts of the **ramenrev** data frame with the **ramenran** data frame, calling it **brandran**.
+
+```{r}
+brandran <- merge(x=select(ramenrev, Review_ID, Brand), 
+                     y=select(ramenran, Review_ID, Rank_Category, Rank), by='Review_ID')
+```
+<br>
+I don't want to use all Top 10 rank categories though, as some are country-specific (which would skew the results for some brands) and others are not necessarily "good" rankings (like the Bottom Ten or Top Spicy rankings). Let's see which rankings there are...
+
+```{r}
+unique(brandran$Rank_Category)
+```
+<br>
+... and then filter out a subset of them into a new data frame, **brandbest**.
+
+```{r}
+brandbest <- subset(brandran, Rank_Category %in% 
+                      c('Top Pack', "Reader's Choice", 'Top Rice Noodle', 
+                        'Top Bowl', 'Top Cup', 'Top Tray', 'Top Boxed', 'Top Of All Time' )
+                    )
+```
+<br>
+Now group by brand, and see how many times each brand appeared in a Top 10 Count and the average placement in the ranking.
+
+```{r}
+brandbest <- brandbest %>% group_by(Brand) %>% 
+  summarize(Top_10_Count = n(), Mean_Rank = mean(Rank))
+```
+<br>
+Let's clean the data a bit, rounding the values and arranging it first from most appearances to least, and second from best placement to worst. Then we'll view the data frame and get a statistical summary of it.
+
+```{r}
+brandbest$Mean_Rank <- round(brandbest$Mean_Rank, digits = 2)
+brandbest <- brandbest %>% arrange(desc(Top_10_Count), Mean_Rank)
+
+datatable(brandbest)
+summary(brandbest)
+```
+<br>
+It seems Nissin had the most appearances in Top 10 lists with a mean rank of 5.45. Second is MyKuali which, although has fewer appearances than Nissin, has a mean rank within the top 4. Pretty impressive!
+
+This has been data analysis with R.
